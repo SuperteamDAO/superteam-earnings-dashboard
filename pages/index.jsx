@@ -6,6 +6,7 @@ import axios from 'axios'
 import addSubtractDate from 'add-subtract-date'
 import React, { useEffect, useState } from 'react';
 
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -403,6 +404,9 @@ export default function Home({ tokenTimePriceMap, sheetData }) {
   const pages = ['Home', 'Projects', 'Earning Graph', 'Rainmaker Leaderboard', 'Sponsor Leaderboard'];
   return (
     <div className={styles.home}>
+      <Head>
+        <link rel="preload" as="image" href="/home-1.jpg" />
+      </Head>
       <div className={styles.globalNav}>
         {
           pages.map((ele) => {
