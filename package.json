@@ -1,0 +1,27 @@
+{
+  "name": "earningdashboard",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^7.5.0",
+    "add-subtract-date": "^1.0.15",
+    "axios": "^0.27.2",
+    "chart.js": "^3.9.1",
+    "ioredis": "^5.2.3",
+    "next": "12.3.1",
+    "react": "18.2.0",
+    "react-chartjs-2": "^4.3.1",
+    "react-dom": "18.2.0",
+    "sass": "^1.55.0"
+  },
+  "devDependencies": {
+    "eslint": "8.24.0",
+    "eslint-config-next": "12.3.1"
+  }
+}
