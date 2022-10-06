@@ -19,6 +19,13 @@
     padding: 25px;
     column-gap: 20px;
     animation: pageTransition 0.75s ease-in-out forwards;
+
+    @media (max-width: 1200px) {
+        flex-direction: column-reverse;
+        width: 80vw;
+        margin-top: 90px;
+        margin-bottom: 80px;
+    }
 }
 
 .leftSec {
@@ -27,6 +34,10 @@
     height: 100%;
     flex-direction: column;
     // outline: 1px solid white;
+    @media (max-width: 1200px) {
+        flex-direction: column-reverse;
+        width: 100%;
+    }
 }
 
 .chart {
@@ -38,6 +49,10 @@
     border-radius: 25px;
     padding: 25px;
     background-color: rgba(0, 0, 0, 0.384);
+
+    @media (max-width: 1200px) {
+        margin-top: 20px;
+    }
 }
 
 .recentProjects {
@@ -61,6 +76,22 @@
     backdrop-filter: blur(100px);
     padding: 25px;
     // outline: 1px solid white;
+
+    @media (max-width: 1200px) {
+        flex-direction: row;
+        width: 100%;
+        height: fit-content;
+        align-items: center;
+
+        .divider {
+            height: 100%;
+            width: 1.5px;
+        }
+
+        .top3 {
+            display: none;
+        }
+    }
 }
 
 .totalEarning {
@@ -81,6 +112,10 @@
         color: white;
     }
     //margin-bottom: auto;
+
+    @media (max-width: 1200px) {
+      align-items: flex-start;
+    }
 }
 
 .divider {
