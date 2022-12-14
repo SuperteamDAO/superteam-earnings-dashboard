@@ -19,7 +19,6 @@ import {
   Filler
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { faker } from '@faker-js/faker';;
 
 ChartJS.register(
   CategoryScale,
@@ -190,6 +189,9 @@ export default function Home({ tokenTimePriceMap, sheetData }) {
 
   let xAxis = [...graphData]
   xAxis[0] = todaysTotal;
+
+
+
   let data = {
     labels: dateRangeArrayState.map((ele) => { console.log(ele); return unixToDate(ele).toLocaleDateString() }).reverse(),
     datasets: [
@@ -205,6 +207,39 @@ export default function Home({ tokenTimePriceMap, sheetData }) {
   }
 
   const Chart = () => {
+
+    const [data, setdata] = useState({
+      labels: dateRangeArrayState.map((ele) => { console.log(ele); return unixToDate(ele).toLocaleDateString() }).reverse(),
+      datasets: [
+        {
+          label: 'Dataset 1',
+          data: xAxis.reverse(),
+          borderColor: 'rgb(255, 255, 255)',
+          backgroundColor: 'rgb(0, 0, 0,0.05)',
+          tension: 0.3,
+          fill: true,
+        },
+      ],
+    });
+
+    useEffect(() => {
+      setdata({
+        ...{
+          labels: dateRangeArrayState.map((ele) => { console.log(ele); return unixToDate(ele).toLocaleDateString() }).reverse(),
+          datasets: [
+            {
+              label: 'Dataset 1',
+              data: xAxis.reverse(),
+              borderColor: 'rgb(255, 255, 255)',
+              backgroundColor: 'rgb(0, 0, 0,0.05)',
+              tension: 0.3,
+              fill: true,
+            },
+          ],
+        }
+      })
+    }, [])
+
     return (
       <div className={styles.chartWrapper}>
         <span className={styles.rangeNav}>
