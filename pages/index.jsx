@@ -19,6 +19,7 @@ import {
   Filler
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import { faker } from '@faker-js/faker';;
 
 ChartJS.register(
   CategoryScale,
@@ -68,7 +69,7 @@ export const options = {
 
 const RANGE = { '3D': 3, 'W': 7, 'M': 30, '3M': 90 }
 
-export default function Home({ tokenTimePriceMap, sheetData }) {
+export default function Home({ tokenTimePriceMap, sheetData, graphDataRedis }) {
 
   const [dateRangeArrayState, setdateRangeArray] = useState([]);
   const [graphData, setgraphData] = useState([]);
@@ -189,9 +190,6 @@ export default function Home({ tokenTimePriceMap, sheetData }) {
 
   let xAxis = [...graphData]
   xAxis[0] = todaysTotal;
-
-
-
   let data = {
     labels: dateRangeArrayState.map((ele) => { console.log(ele); return unixToDate(ele).toLocaleDateString() }).reverse(),
     datasets: [
@@ -207,39 +205,6 @@ export default function Home({ tokenTimePriceMap, sheetData }) {
   }
 
   const Chart = () => {
-
-    const [data, setdata] = useState({
-      labels: dateRangeArrayState.map((ele) => { console.log(ele); return unixToDate(ele).toLocaleDateString() }).reverse(),
-      datasets: [
-        {
-          label: 'Dataset 1',
-          data: xAxis.reverse(),
-          borderColor: 'rgb(255, 255, 255)',
-          backgroundColor: 'rgb(0, 0, 0,0.05)',
-          tension: 0.3,
-          fill: true,
-        },
-      ],
-    });
-
-    useEffect(() => {
-      setdata({
-        ...{
-          labels: dateRangeArrayState.map((ele) => { console.log(ele); return unixToDate(ele).toLocaleDateString() }).reverse(),
-          datasets: [
-            {
-              label: 'Dataset 1',
-              data: xAxis.reverse(),
-              borderColor: 'rgb(255, 255, 255)',
-              backgroundColor: 'rgb(0, 0, 0,0.05)',
-              tension: 0.3,
-              fill: true,
-            },
-          ],
-        }
-      })
-    }, [])
-
     return (
       <div className={styles.chartWrapper}>
         <span className={styles.rangeNav}>
@@ -250,7 +215,7 @@ export default function Home({ tokenTimePriceMap, sheetData }) {
 
           }
         </span>
-        <Line key={range + 'chart'} options={options} data={data} />
+        <Line key={range + 'chart'} options={options} data={graphDataRedis[range]} />
       </div>
     )
   }
@@ -324,16 +289,16 @@ export default function Home({ tokenTimePriceMap, sheetData }) {
           </div>
           <div className={styles.scrollCon}>
             {
-              positionCombinedSheet.reverse().map((ele) => {
+              positionCombinedSheet.map((ele) => {
                 return (
                   <div key={ele['Project']} className={styles.tableBody} >
                     <span className={styles.recentProjectTitle}>{ele['Project']}</span>
                     <span className={styles.projectDate}>{ele['Date Given']}</span>
                     <span className={styles.token}>{ele['Token']}</span>
-                    <span className={styles.usd}>$ {ele['totalPrize']}</span>
+                    <span className={styles.usd}>$ {ele['Total Earnings USD']}</span>
                   </div>
                 )
-              })
+              }).reverse()
             }
           </div>
         </div>
@@ -357,13 +322,16 @@ export default function Home({ tokenTimePriceMap, sheetData }) {
               <span className={styles.token}>Token</span>
               <span className={styles.usd}>USD</span>
             </div>
-            {[0, 1, 2].map((pr) => {
+            {[...positionCombinedSheet].reverse().map((pr, idx) => {
+              if (idx > 2) {
+                return null
+              }
               return (
-                <div key={pr + "name"}>
-                  <span className={styles.recentProjectTitle}>{overflowText(positionCombinedSheet.reverse()[pr]['Project'])}</span>
-                  <span className={styles.projectDate}>{positionCombinedSheet.reverse()[pr]['Date Given']}</span>
-                  <span className={styles.token}>{positionCombinedSheet.reverse()[pr]['Token']}</span>
-                  <span className={styles.usd}>$ {positionCombinedSheet.reverse()[pr]['Total Earnings USD']}</span>
+                <div key={pr + "namex"}>
+                  <span className={styles.recentProjectTitle}>{overflowText(pr['Project'])}</span>
+                  <span className={styles.projectDate}>{pr['Date Given']}</span>
+                  <span className={styles.token}>{pr['Token']}</span>
+                  <span key={pr['Total Earnings USD']} className={styles.usd}>$ {pr['Total Earnings USD']}</span>
                 </div>
               )
             })
@@ -503,7 +471,9 @@ export async function getServerSideProps(context) {
     })
   })
 
+  let graphData = await redis.get('graph-data');
+
   return {
-    props: { tokenTimePriceMap, sheetData: data[1].data }, // will be passed to the page component as props
+    props: { tokenTimePriceMap, sheetData: data[1].data, graphDataRedis: JSON.parse(graphData) }, // will be passed to the page component as props
   }
 }
