@@ -1,11 +1,10 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../pages/Home/home.module.scss'
-import redis from '../lib/redis'
 import axios from 'axios'
 import addSubtractDate from 'add-subtract-date'
 import React, { useEffect, useState } from 'react';
-
+import graph from '../lib/graph.json'
 
 import {
   Chart as ChartJS,
@@ -130,7 +129,7 @@ export default function Home({ tokenTimePriceMap, sheetData, graphDataRedis }) {
   }
 
   useEffect(() => {
-    generateGraphData();
+    //generateGraphData();
   }, [range])
 
 
@@ -188,21 +187,21 @@ export default function Home({ tokenTimePriceMap, sheetData, graphDataRedis }) {
     return b[1] - a[1]
   });
 
-  let xAxis = [...graphData]
-  xAxis[0] = todaysTotal;
-  let data = {
-    labels: dateRangeArrayState.map((ele) => { console.log(ele); return unixToDate(ele).toLocaleDateString() }).reverse(),
-    datasets: [
-      {
-        label: 'Dataset 1',
-        data: xAxis.reverse(),
-        borderColor: 'rgb(255, 255, 255)',
-        backgroundColor: 'rgb(0, 0, 0,0.05)',
-        tension: 0.3,
-        fill: true,
-      },
-    ],
-  }
+  // let xAxis = [...graphData]
+  // xAxis[0] = todaysTotal;
+  // let data = {
+  //   labels: dateRangeArrayState.map((ele) => { console.log(ele); return unixToDate(ele).toLocaleDateString() }).reverse(),
+  //   datasets: [
+  //     {
+  //       label: 'Dataset 1',
+  //       data: xAxis.reverse(),
+  //       borderColor: 'rgb(255, 255, 255)',
+  //       backgroundColor: 'rgb(0, 0, 0,0.05)',
+  //       tension: 0.3,
+  //       fill: true,
+  //     },
+  //   ],
+  // }
 
   const Chart = () => {
     return (
@@ -461,19 +460,20 @@ let createDate = (date) => {
 
 let SHEET_URL = `https://api.steinhq.com/v1/storages/62e2315abca21f053ea5d9c6/Bounties%20Paid`;
 export async function getServerSideProps(context) {
-  let data = await Promise.all([redis.get('historic-price-data'), await axios.get(SHEET_URL)])
-  let HISTORIC_DATA = JSON.parse(data[0]);
-  let tokenTimePriceMap = {};
-  Object.keys(HISTORIC_DATA).forEach((token) => {
-    tokenTimePriceMap[token] = {}
-    HISTORIC_DATA[token].forEach((time) => {
-      tokenTimePriceMap[token][time[0]] = time[1]
-    })
-  })
+  // let data = await Promise.all([await axios.get(SHEET_URL), await axios.get(SHEET_URL)])
+  // let HISTORIC_DATA = JSON.parse(data[0]);
+  // let tokenTimePriceMap = {};
+  // Object.keys(HISTORIC_DATA).forEach((token) => {
+  //   tokenTimePriceMap[token] = {}
+  //   HISTORIC_DATA[token].forEach((time) => {
+  //     tokenTimePriceMap[token][time[0]] = time[1]
+  //   })
+  // })
 
-  let graphData = await redis.get('graph-data');
-
+  // let graphData = await redis.get('graph-data');
+  let graphData = graph;
+  let data = await axios.get(SHEET_URL);
   return {
-    props: { tokenTimePriceMap, sheetData: data[1].data, graphDataRedis: JSON.parse(graphData) }, // will be passed to the page component as props
+    props: { tokenTimePriceMap: {}, sheetData: data.data, graphDataRedis: graphData }, // will be passed to the page component as props
   }
 }
