@@ -86,8 +86,8 @@ export default function Home({ tokenTimePriceMap, sheetData, graphDataRedis }) {
     let noOfTokens = 0;
     ['1st Prize', '2nd Prize', '3rd Prize'].forEach((pr) => {
       try {
-        if (parseInt(entry[pr].replaceAll(',', '')) > 0) {
-          noOfTokens = noOfTokens + parseInt(entry[pr].replaceAll(',', ''));
+        if (parseInt(entry[pr].replaceAll(',', '').replaceAll('$', '')) > 0) {
+          noOfTokens = noOfTokens + parseInt(entry[pr].replaceAll(',', '').replaceAll('$', ''));
         }
       }
       catch (er) {
@@ -98,45 +98,13 @@ export default function Home({ tokenTimePriceMap, sheetData, graphDataRedis }) {
     return entry
   })
 
-  const generateGraphData = () => {
-    let dateRangeArray = getDateRangeArray();
-    dateRangeArray = dateRangeArray.map((ele) => {
-      return getUnixTime(new Date(ele))
-    })
-    setdateRangeArray(dateRangeArray);
-    let dateTokenCountArray = dateRangeArray.map((ele) => {
-      let sum = [];
-      positionCombinedSheet.forEach((entry) => {
-        let projectData = createDate(entry['Date Given']); // string
-        let labelDate = unixToDate(ele); // unix date;
-        if (projectData < labelDate) {
-          sum.push([entry['Token'], entry.totalPrize]);
-        }
-      })
-      return sum;
-    })
-    let dateTokenSumArray = dateTokenCountArray.map((dat, idx) => {
-      let sum = 0;
-      dat.forEach((pair) => {
-        if (pair[1] > 0) {
-          sum = sum + parseInt(tokenTimePriceMap[pair[0]][dateRangeArray[idx]] * pair[1])
-        }
-      })
-      console.log(sum);
-      return sum
-    })
-    setgraphData(dateTokenSumArray);
-  }
-
-  useEffect(() => {
-    //generateGraphData();
-  }, [range])
-
-
   let todaysTotal = 0;
   sheetData.forEach((prj) => {
     try {
-      let amount = parseInt(prj['Total Earnings USD'].replaceAll(',', ''))
+      let amount = parseInt(prj['Total Earnings USD'].replaceAll(',', '').replaceAll('$', ''))
+      if (isNaN(amount)) {
+        return null
+      }
       todaysTotal = todaysTotal + amount;
     }
     catch (er) {
@@ -152,7 +120,7 @@ export default function Home({ tokenTimePriceMap, sheetData, graphDataRedis }) {
   })
   positionCombinedSheet.forEach((entry) => {
     try {
-      let total = parseInt(entry['Total Earnings USD'].replaceAll(',', ''))
+      let total = parseInt(entry['Total Earnings USD'].replaceAll(',', '').replaceAll('$', ''))
       if (total > 0) {
         rainMakerList[entry['Rainmaker']] = rainMakerList[entry['Rainmaker']] + total;
       }
@@ -173,7 +141,7 @@ export default function Home({ tokenTimePriceMap, sheetData, graphDataRedis }) {
   })
   positionCombinedSheet.forEach((entry) => {
     try {
-      let total = parseInt(entry['Total Earnings USD'].replaceAll(',', ''))
+      let total = parseInt(entry['Total Earnings USD'].replaceAll(',', '').replaceAll('$', ''))
       if (total > 0) {
         sponsorList[entry['Sponsor']] = sponsorList[entry['Sponsor']] + total;
       }
@@ -186,22 +154,6 @@ export default function Home({ tokenTimePriceMap, sheetData, graphDataRedis }) {
   }).sort((a, b) => {
     return b[1] - a[1]
   });
-
-  // let xAxis = [...graphData]
-  // xAxis[0] = todaysTotal;
-  // let data = {
-  //   labels: dateRangeArrayState.map((ele) => { console.log(ele); return unixToDate(ele).toLocaleDateString() }).reverse(),
-  //   datasets: [
-  //     {
-  //       label: 'Dataset 1',
-  //       data: xAxis.reverse(),
-  //       borderColor: 'rgb(255, 255, 255)',
-  //       backgroundColor: 'rgb(0, 0, 0,0.05)',
-  //       tension: 0.3,
-  //       fill: true,
-  //     },
-  //   ],
-  // }
 
   const Chart = () => {
     return (
@@ -430,8 +382,6 @@ export default function Home({ tokenTimePriceMap, sheetData, graphDataRedis }) {
 
 }
 
-
-
 const overflowText = (str) => {
   if (str.length < 45) {
     return str
@@ -471,7 +421,8 @@ export async function getServerSideProps(context) {
   // })
 
   // let graphData = await redis.get('graph-data');
-  let graphData = graph;
+  let graphData_res = (await axios.get('https://api.steinhq.com/v1/storages/63bd9d99eced9b09e9b23f66/Sheet1'));
+  let graphData = JSON.parse(graphData_res.data[0].value)
   let data = await axios.get(SHEET_URL);
   return {
     props: { tokenTimePriceMap: {}, sheetData: data.data, graphDataRedis: graphData }, // will be passed to the page component as props
