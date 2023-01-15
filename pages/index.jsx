@@ -408,7 +408,7 @@ let createDate = (date) => {
 
 
 
-let SHEET_URL = `https://api.steinhq.com/v1/storages/62e2315abca21f053ea5d9c6/Bounties%20Paid`;
+let SHEET_URL = `https://api.steinhq.com/v1/storages/63c425eed27cdd09f0d913f1/Bounties%20Paid`;
 export async function getServerSideProps(context) {
   // let data = await Promise.all([await axios.get(SHEET_URL), await axios.get(SHEET_URL)])
   // let HISTORIC_DATA = JSON.parse(data[0]);
