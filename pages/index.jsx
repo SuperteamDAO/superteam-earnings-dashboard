@@ -37,7 +37,7 @@ function Index({
   const [selectedPage, setselectedPage] = useState("Home");
 
   return (
-    <div className="flex h-screen w-screen justify-center bg-hero-bg bg-cover bg-no-repeat">
+    <div className="flex min-h-screen h-max w-screen justify-center bg-hero-bg bg-cover bg-no-repeat pb-16 overflow-x-hidden">
       <PageNav {...{ selectedPage, setselectedPage }} />
       {selectedPage == pages[0] && <Home />}
       {selectedPage == pages[1] && <Projects sheetData={sheetData} />}
