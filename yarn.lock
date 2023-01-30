@@ -1661,6 +1661,11 @@
     "object-assign" "^4.1.1"
     "react-is" "^16.13.1"
 
+"public-google-sheets-parser@^1.2.6":
+  "integrity" "sha512-sWtWEGw7735Hfo04zjMGiXF7XI9SNTjBJFQQluIQmPjI3hnB9pSgcUMPGRF+W0IiJSF28x2EksJ/n1Vi/x8jYg=="
+  "resolved" "https://registry.npmjs.org/public-google-sheets-parser/-/public-google-sheets-parser-1.2.6.tgz"
+  "version" "1.2.6"
+
 "punycode@^2.1.0":
   "integrity" "sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A=="
   "resolved" "https://registry.npmjs.org/punycode/-/punycode-2.1.1.tgz"
