@@ -31,7 +31,7 @@ export async function generate() {
     sheetData = sheetData.map((elm) => {
         elm['Date Given'] = `${elm['Date Given']}`.replaceAll('Date', '').replaceAll('(', '').replaceAll(')', '')
 
-        elm['Date Given'] = `${elm['Date Given'].split(',')[1] + 1}/${elm['Date Given'].split(',')[2]}/${elm['Date Given'].split(',')[0]}`
+        elm['Date Given'] = `${parseInt(elm['Date Given'].split(',')[1]) + 1}/${elm['Date Given'].split(',')[2]}/${elm['Date Given'].split(',')[0]}`
 
         let first = elm["1st Prize"]
             ? parseInt(elm["1st Prize"])
