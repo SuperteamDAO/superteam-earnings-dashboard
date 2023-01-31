@@ -60,12 +60,12 @@ export async function generate() {
     // sorted rainmakers 
     let sortedRainmakers = Object.keys(rainmakers).sort((a, b) => {
         return rainmakers[b] - rainmakers[a];
-    }).filter(ele => (ele != 'null'));
+    }).filter(ele => (ele != 'null' && ele != 'undefined'));
 
     // sorted sponsors
     let sortedSponsors = Object.keys(sponsors).sort((a, b) => {
         return sponsors[b] - sponsors[a];
-    }).filter(ele => (ele != 'null'));
+    }).filter(ele => (ele != 'null' && ele != 'undefined'));
 
     return { graphData, sheetData: false || sheetData.reverse(), rainmakers, sponsors, totalEarning, sortedRainmakers, sortedSponsors }
 
