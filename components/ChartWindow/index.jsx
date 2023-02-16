@@ -61,7 +61,7 @@ const Chart = ({ graphData, range, setrange }) => {
   const RANGE = { "3D": 3, W: 7, M: 30, "3M": 90 };
 
   return (
-    <div className="mt-32 flex flex-col h-[80vh]  w-[1150px] gap-x-5 rounded-[30px] p-6 backdrop-blur-[100px] overflow-hidden">
+    <div className="flex flex-col h-[80vh]  w-[1150px] gap-x-5 rounded-[30px] p-6 backdrop-blur-[100px] overflow-hidden">
       <div className="relative flex h-full w-full rounded-[30px] bg-[rgba(0,0,0,.29)] p-6">
         <span className="absolute left-0 right-0 mx-auto flex w-min gap-4">
           {Object.keys(RANGE).map((ele) => {

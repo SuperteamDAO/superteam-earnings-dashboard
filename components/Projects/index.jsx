@@ -5,18 +5,20 @@ import overflowText from "../../lib/overflow";
 
 function Index({ sheetData }) {
   return (
-    <div className="mt-32 flex flex-col h-[80vh]  w-[1150px] gap-x-5 rounded-[30px] p-6 backdrop-blur-[100px] overflow-hidden">
-      <span className="flex w-[98%] px-6 text-white border-b-[0.5px] border-[hsla(0,0%,100%,.288)] py-2 mb-3">
-        <h1 className="w-[50%]">Projects</h1>
-        <h1 className="w-[15%]">Date Given</h1>
-        <h1 className="w-[15%]">Token</h1>
-        <h1 className="w-[25%] text-right">USD</h1>
-      </span>
-      <span className="scrollcon flex flex-col h-[100%] overflow-y-scroll">
-        {sheetData.map((ele, idx) => {
-          return <Entries key={idx} data={ele} />;
-        })}
-      </span>
+    <div className="flex flex-1 items-center">
+      <div className="flex flex-col max-h-[70vh] w-[1150px] gap-x-5 rounded-[30px] p-6 backdrop-blur-[100px] overflow-hidden">
+        <span className="flex w-[98%] px-6 text-white border-b-[0.5px] border-[hsla(0,0%,100%,.288)] py-2 mb-3">
+          <h1 className="w-[50%]">Projects</h1>
+          <h1 className="w-[15%]">Date Given</h1>
+          <h1 className="w-[15%]">Token</h1>
+          <h1 className="w-[25%] text-right">USD</h1>
+        </span>
+        <span className="scrollcon flex flex-col overflow-y-scroll">
+          {sheetData.map((ele, idx) => {
+            return <Entries key={idx} data={ele} />;
+          })}
+        </span>
+      </div>
     </div>
   );
 }

@@ -13,6 +13,7 @@ import ChartWindow from "../components/ChartWindow";
 
 //lib
 import overflowText from "../lib/overflow";
+import Footer from "../components/Footer";
 
 const RANGE = { "3D": 3, W: 7, M: 30, "3M": 90 };
 
@@ -37,7 +38,7 @@ function Index({
   const [selectedPage, setselectedPage] = useState("Home");
 
   return (
-    <div className="flex min-h-screen h-max w-screen justify-center bg-hero-bg bg-cover bg-no-repeat pb-16 overflow-x-hidden">
+    <div className="flex flex-col min-h-screen w-full items-center bg-hero-bg bg-cover bg-no-repeat overflow-x-hidden">
       <PageNav {...{ selectedPage, setselectedPage }} />
       {selectedPage == pages[0] && <Home />}
       {selectedPage == pages[1] && <Projects sheetData={sheetData} />}
@@ -53,12 +54,14 @@ function Index({
       {selectedPage == pages[4] && (
         <Sponsor sponsors={sponsors} sortedSponsors={sortedSponsors} />
       )}
+
+      <Footer />
     </div>
   );
 
   function Home() {
     return (
-      <div className="mt-32 flex h-fit  w-[1150px] gap-x-5 rounded-[30px] p-6 backdrop-blur-[100px]">
+      <div className="flex flex-1 w-[1150px] gap-x-5 rounded-[30px] p-6 backdrop-blur-[100px]">
         <div className="flex w-[75%] flex-col gap-y-5">
           <Chart graphData={graphData} range={range} setrange={setrange} />
           <RecentProjects
@@ -80,7 +83,7 @@ function Index({
 
 function PageNav({ selectedPage, setselectedPage }) {
   return (
-    <div className="absolute top-5 left-0 right-0 mx-auto flex w-fit gap-x-2 rounded-lg bg-[rgba(0,0,0,0.178)] p-1.5 backdrop-blur-[10px]">
+    <div className="my-6 mx-auto flex w-fit gap-x-2 rounded-lg bg-[rgba(0,0,0,0.178)] p-1.5 backdrop-blur-[10px]">
       {pages.map((ele) => {
         return (
           <button
